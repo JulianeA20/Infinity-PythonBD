@@ -14,18 +14,30 @@ def buscarDados():
 
     treeView.delete(*treeView.get_children())
 
+    marca = entryMarca.get()
+    modelo = entryModelo.get()
+    cor = entryCor.get()
+    placa = entryPlaca.get()
+
     conn = getConnection()
 
     cursor = conn.cursor()
-    sql = (f"SELECT * FROM carro")
+    sql = (f"SELECT * FROM carro WHERE TRUE ")
+    if placa != "":
+        sql = sql + (f" AND placa = '{placa}'")
+    if marca != "":
+        sql = sql + (f" AND marca = '{marca}'")
+    if cor != "":
+        sql = sql + (f" AND cor = '{cor}'")
+    if modelo != "":
+        sql = sql + (f" AND modelo = '{modelo}'")
+
     cursor.execute(sql)
 
     for (marca,modelo,cor,placa) in cursor:
-        treeView.insert("","end", values=[marca,modelo,cor,placa])
+        treeView.insert("","end",values=[marca,modelo,cor,placa])
 
     conn.close()
-
-    treeView.delete()
 
 def cadastrar():
     conn = getConnection()
